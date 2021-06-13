@@ -8,9 +8,9 @@ public class EventHandler implements ActionListener {
     private static GameGrid currentGrid;
 
     @Override
-    public void actionPerformed(ActionEvent e) {
+    public void actionPerformed(ActionEvent e){
         //if user presses play button on main menu
-        if (e.getSource()==Minesweeper.getWelcomeScreenPlayButton()) {
+        if (e.getSource()==Minesweeper.getWelcomeScreenPlayButton()){
             //generate the grid pattern for the bombs and numbers
             currentGrid = new GameGrid();
             currentGrid.output();
@@ -22,14 +22,14 @@ public class EventHandler implements ActionListener {
 
             int row = 0;
             int column = 0;
-            for (int i = 0; i < 80; i++) {
+            for (int i = 0; i < 80; i++){
                 Minesweeper.getButtons()[i].setIcon(null);
                 Minesweeper.getGamePanel().add(Minesweeper.getButtons()[i]);
-                if (currentGrid.getBombGrid()[row][column]) {
+                if (currentGrid.getBombGrid()[row][column]){
                     Minesweeper.getLocations()[i].setIcon(Minesweeper.getBombIcon());
-                } else {
+                }else {
                     int numOfSurroundingBombs = currentGrid.getNumberGrid()[row][column];
-                    switch (numOfSurroundingBombs) {
+                    switch (numOfSurroundingBombs){
                         case 0 -> Minesweeper.getLocations()[i].setIcon(Minesweeper.getZeroIcon());
                         case 1 -> Minesweeper.getLocations()[i].setIcon(Minesweeper.getOneIcon());
                         case 2 -> Minesweeper.getLocations()[i].setIcon(Minesweeper.getTwoIcon());
@@ -41,10 +41,10 @@ public class EventHandler implements ActionListener {
                         case 8 -> Minesweeper.getLocations()[i].setIcon(Minesweeper.getEightIcon());
                     }
                 }
-                if (column == 7) {
+                if (column == 7){
                     column = 0;
                     row += 1;
-                } else {
+                }else {
                     column += 1;
                 }
                 Minesweeper.getGamePanel().add(Minesweeper.getLocations()[i]);
@@ -53,13 +53,13 @@ public class EventHandler implements ActionListener {
             Minesweeper.getFrame().revalidate();
             Minesweeper.getFrame().repaint();
         //if the user presses the theme button
-        }else if (e.getSource()==Minesweeper.getThemesButton()) {
+        }else if (e.getSource()==Minesweeper.getThemesButton()){
             Minesweeper.getFrame().setSize(250, 175);
             Minesweeper.getFrame().remove(Minesweeper.getWelcomePanel());
             Minesweeper.getFrame().add(Minesweeper.getThemesPanel());
         //if the user presses the classic theme button
         }else if (e.getSource()==Minesweeper.getClassicButton()){
-            if (Minesweeper.getCurrentTheme()!=Theme.CLASSIC) {
+            if (Minesweeper.getCurrentTheme()!=Theme.CLASSIC){
                 Minesweeper.setCurrentTheme(Theme.CLASSIC);
                 Minesweeper.getWelcomePanel().setBackground(Color.lightGray);
                 Minesweeper.getGamePanel().setBackground(Color.lightGray);
@@ -80,8 +80,8 @@ public class EventHandler implements ActionListener {
                 Minesweeper.getThemesPanel().repaint();
             }
         //if the user presses the ocean theme button
-        }else if (e.getSource()==Minesweeper.getOceanButton()) {
-            if (Minesweeper.getCurrentTheme() != Theme.OCEAN) {
+        }else if (e.getSource()==Minesweeper.getOceanButton()){
+            if (Minesweeper.getCurrentTheme() != Theme.OCEAN){
                 Minesweeper.setCurrentTheme(Theme.OCEAN);
                 Minesweeper.getWelcomePanel().setBackground(new Color(0, 168, 243));
                 Minesweeper.getGamePanel().setBackground(new Color(0, 168, 243));
@@ -108,7 +108,7 @@ public class EventHandler implements ActionListener {
             Minesweeper.getFrame().revalidate();
             Minesweeper.getFrame().repaint();
         //if the user presses the main menu button
-        }else if (e.getSource()==Minesweeper.getReturnButton()) {
+        }else if (e.getSource()==Minesweeper.getReturnButton()){
             returnToHome();
         }else {
             int row = 0;
@@ -125,16 +125,16 @@ public class EventHandler implements ActionListener {
                         gameOverMessage();
                     }else {
                         //check for a guess on an empty tile
-                        if (currentGrid.getNumberGrid()[row][column] == 0) {
+                        if (currentGrid.getNumberGrid()[row][column] == 0){
                             recursiveClearEmptySpots(i);
                         }
                         //logic to check if the player won after making a guess (based on if there are 10 buttons left)
                         int buttonCount = 0;
                         boolean gameWon = true;
                         JButton[] remainingButtons = new JButton[10];
-                        for (JButton button : Minesweeper.getButtons()) {
-                            if (button.getParent() == Minesweeper.getGamePanel()) {
-                                if (buttonCount < 10) {
+                        for (JButton button : Minesweeper.getButtons()){
+                            if (button.getParent() == Minesweeper.getGamePanel()){
+                                if (buttonCount < 10){
                                     remainingButtons[buttonCount] = button;
                                 }else {
                                     gameWon = false;
@@ -143,8 +143,8 @@ public class EventHandler implements ActionListener {
                                 buttonCount += 1;
                             }
                         }
-                        if (gameWon) {
-                            for (JButton buttonToRemove : remainingButtons) {
+                        if (gameWon){
+                            for (JButton buttonToRemove : remainingButtons){
                                 Minesweeper.getGamePanel().remove(buttonToRemove);
                             }
                             winnerMessage();
@@ -204,7 +204,7 @@ public class EventHandler implements ActionListener {
         //loop through tiles to check
         for (int surroundingLocation : surroundingTiles){
             //check if button is still uncovered on grid
-            if (Minesweeper.getButtons()[surroundingLocation].getParent()==Minesweeper.getGamePanel()) {
+            if (Minesweeper.getButtons()[surroundingLocation].getParent()==Minesweeper.getGamePanel()){
                 Minesweeper.getGamePanel().remove(Minesweeper.getButtons()[surroundingLocation]);
                 //check if revealed space is also an empty tile
                 if (Minesweeper.getLocations()[surroundingLocation].getIcon().equals(Minesweeper.getZeroIcon())){
