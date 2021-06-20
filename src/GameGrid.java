@@ -257,6 +257,9 @@ public class GameGrid {
         return caseGrid;
     }
 
+    /**
+     * Outputs the pattern of bombs and clues to the console
+     */
     public void output(){
         for (boolean[] booleans : bombGrid) {
             System.out.println(Arrays.toString(booleans));

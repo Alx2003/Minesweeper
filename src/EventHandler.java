@@ -52,11 +52,15 @@ public class EventHandler implements ActionListener {
 
             Minesweeper.getFrame().revalidate();
             Minesweeper.getFrame().repaint();
+
         //if the user presses the theme button
         }else if (e.getSource()==Minesweeper.getThemesButton()){
             Minesweeper.getFrame().setSize(250, 175);
             Minesweeper.getFrame().remove(Minesweeper.getWelcomePanel());
             Minesweeper.getFrame().add(Minesweeper.getThemesPanel());
+            Minesweeper.getFrame().revalidate();
+            Minesweeper.getFrame().repaint();
+
         //if the user presses the classic theme button
         }else if (e.getSource()==Minesweeper.getClassicButton()){
             if (Minesweeper.getCurrentTheme()!=Theme.CLASSIC){
@@ -64,6 +68,7 @@ public class EventHandler implements ActionListener {
                 Minesweeper.getWelcomePanel().setBackground(Color.lightGray);
                 Minesweeper.getGamePanel().setBackground(Color.lightGray);
                 Minesweeper.getThemesPanel().setBackground(Color.lightGray);
+                Minesweeper.getDifficultyPanel().setBackground(Color.lightGray);
                 Minesweeper.getBombIcon().setImage(Minesweeper.getBombImageClassic());
                 Minesweeper.getBombExplosionIcon().setImage(Minesweeper.getBombExplosionImageClassic());
                 Minesweeper.getZeroIcon().setImage(Minesweeper.getZeroImageClassic());
@@ -79,13 +84,15 @@ public class EventHandler implements ActionListener {
                 Minesweeper.getThemesPanel().revalidate();
                 Minesweeper.getThemesPanel().repaint();
             }
+
         //if the user presses the ocean theme button
         }else if (e.getSource()==Minesweeper.getOceanButton()){
-            if (Minesweeper.getCurrentTheme() != Theme.OCEAN){
+            if (Minesweeper.getCurrentTheme()!=Theme.OCEAN){
                 Minesweeper.setCurrentTheme(Theme.OCEAN);
                 Minesweeper.getWelcomePanel().setBackground(new Color(0, 168, 243));
                 Minesweeper.getGamePanel().setBackground(new Color(0, 168, 243));
                 Minesweeper.getThemesPanel().setBackground(new Color(0, 168, 243));
+                Minesweeper.getDifficultyPanel().setBackground(new Color(0, 168, 243));
                 Minesweeper.getBombIcon().setImage(Minesweeper.getBombImageOcean());
                 Minesweeper.getBombExplosionIcon().setImage(Minesweeper.getBombExplosionImageOcean());
                 Minesweeper.getZeroIcon().setImage(Minesweeper.getZeroImageOcean());
@@ -101,15 +108,57 @@ public class EventHandler implements ActionListener {
                 Minesweeper.getThemesPanel().revalidate();
                 Minesweeper.getThemesPanel().repaint();
             }
+
+        //if the user presses the back button on the themes panel
         }else if (e.getSource()==Minesweeper.getThemesBackButton()){
             Minesweeper.getFrame().setSize(300, 250);
             Minesweeper.getFrame().remove(Minesweeper.getThemesPanel());
             Minesweeper.getFrame().add(Minesweeper.getWelcomePanel());
             Minesweeper.getFrame().revalidate();
             Minesweeper.getFrame().repaint();
+
+        //if the user presses the difficulty button
+        }else if (e.getSource()==Minesweeper.getDifficultyButton()) {
+            Minesweeper.getFrame().setSize(250, 200);
+            Minesweeper.getFrame().remove(Minesweeper.getWelcomePanel());
+            Minesweeper.getFrame().add(Minesweeper.getDifficultyPanel());
+            Minesweeper.getFrame().revalidate();
+            Minesweeper.getFrame().repaint();
+
+        //if the user presses the easy button
+        }else if (e.getSource()==Minesweeper.getEasyButton()){
+            if (Minesweeper.getCurrentDifficulty()!=Difficulty.EASY){
+                Minesweeper.setCurrentDifficulty(Difficulty.EASY);
+                //reconfigure panel size for game, num of label/buttons, placement
+            }
+
+        //if the user presses the medium button
+        }else if (e.getSource()==Minesweeper.getMediumButton()){
+            if (Minesweeper.getCurrentDifficulty()!=Difficulty.MEDIUM){
+                Minesweeper.setCurrentDifficulty(Difficulty.MEDIUM);
+                //reconfigure panel size for game, num of label/buttons, placement
+            }
+
+        //if the user presses the hard button
+        }else if (e.getSource()==Minesweeper.getHardButton()){
+            if (Minesweeper.getCurrentDifficulty()!=Difficulty.HARD){
+                Minesweeper.setCurrentDifficulty(Difficulty.HARD);
+                //reconfigure panel size for game, num of label/buttons, placement
+            }
+
+        //if the user presses the back button on the difficulty panel
+        }else if (e.getSource()==Minesweeper.getDifficultyBackButton()){
+            Minesweeper.getFrame().setSize(300, 250);
+            Minesweeper.getFrame().remove(Minesweeper.getDifficultyPanel());
+            Minesweeper.getFrame().add(Minesweeper.getWelcomePanel());
+            Minesweeper.getFrame().revalidate();
+            Minesweeper.getFrame().repaint();
+
         //if the user presses the main menu button
         }else if (e.getSource()==Minesweeper.getReturnButton()){
             returnToHome();
+
+        //else game guess
         }else {
             int row = 0;
             int column = 0;

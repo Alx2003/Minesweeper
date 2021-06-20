@@ -10,6 +10,7 @@ import java.io.IOException;
 public class Minesweeper {
     
     private static Theme currentTheme;
+    private static Difficulty currentDifficulty;
 
     //Class level GUI objects
     private static JFrame frame;
@@ -26,6 +27,12 @@ public class Minesweeper {
     private static JButton classicButton;
     private static JButton oceanButton;
     private static JButton themesBackButton;
+
+    private static JPanel difficultyPanel;
+    private static JButton easyButton;
+    private static JButton mediumButton;
+    private static JButton hardButton;
+    private static JButton difficultyBackButton;
 
     private static BufferedImage bombImageClassic;
     private static BufferedImage bombExplosionImageClassic;
@@ -73,6 +80,7 @@ public class Minesweeper {
     public static void main(String[] args) throws IOException {
         
         currentTheme = Theme.CLASSIC;
+        currentDifficulty = Difficulty.EASY;
         
         //welcomePanel objects
         welcomePanel = new JPanel();
@@ -126,6 +134,29 @@ public class Minesweeper {
         themesPanel.add(themesBackButton);
 
         //difficultyPanel objects
+        difficultyPanel = new JPanel();
+        difficultyPanel.setLayout(null);
+        difficultyPanel.setBackground(Color.lightGray);
+        JLabel difficultiesText = new JLabel("Difficulties:");
+        difficultiesText.setFont(new Font("Arial", Font.BOLD, 14));
+        difficultiesText.setBounds(75, 20, 80, 20);
+        easyButton = new JButton("Easy");
+        easyButton.setBounds(75, 50, 80, 20);
+        easyButton.addActionListener(new EventHandler());
+        mediumButton = new JButton("Medium");
+        mediumButton.setBounds(75, 75, 80, 20);
+        mediumButton.addActionListener(new EventHandler());
+        hardButton = new JButton("Hard");
+        hardButton.setBounds(75, 100, 80, 20);
+        hardButton.addActionListener(new EventHandler());
+        difficultyBackButton = new JButton("Back");
+        difficultyBackButton.setBounds(75, 135, 80, 20);
+        difficultyBackButton.addActionListener(new EventHandler());
+        difficultyPanel.add(difficultiesText);
+        difficultyPanel.add(easyButton);
+        difficultyPanel.add(mediumButton);
+        difficultyPanel.add(hardButton);
+        difficultyPanel.add(difficultyBackButton);
 
         //gamePanel objects
         gamePanel = new JPanel();
@@ -218,12 +249,18 @@ public class Minesweeper {
         returnButton.setBounds(80, 50, 100, 20);
         returnButton.addActionListener(new EventHandler());
     }
-    //Accessor and mutator for currentTheme
+    //Accessor and mutator for currentTheme and currentDifficulty
     public static Theme getCurrentTheme(){
         return currentTheme;
     }
     public static void setCurrentTheme(Theme newTheme){
         currentTheme = newTheme;
+    }
+    public static Difficulty getCurrentDifficulty(){
+        return currentDifficulty;
+    }
+    public static void setCurrentDifficulty(Difficulty newDifficulty){
+        currentDifficulty = newDifficulty;
     }
 
     //Accessors for GUI objects
@@ -239,6 +276,9 @@ public class Minesweeper {
     public static JButton getThemesButton(){
         return themesButton;
     }
+    public static JButton getDifficultyButton() {
+        return difficultyButton;
+    }
 
     public static JPanel getThemesPanel(){
         return themesPanel;
@@ -251,6 +291,22 @@ public class Minesweeper {
     }
     public static JButton getThemesBackButton(){
         return themesBackButton;
+    }
+
+    public static JPanel getDifficultyPanel() {
+        return difficultyPanel;
+    }
+    public static JButton getEasyButton() {
+        return easyButton;
+    }
+    public static JButton getMediumButton() {
+        return mediumButton;
+    }
+    public static JButton getHardButton(){
+        return hardButton;
+    }
+    public static JButton getDifficultyBackButton(){
+        return difficultyBackButton;
     }
 
     public static JPanel getGamePanel(){
