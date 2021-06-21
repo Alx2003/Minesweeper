@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 public class EventHandler implements ActionListener {
 
     private static GameGrid currentGrid;
+    private static final Color oceanBackground = new Color(0, 168, 243);
 
     @Override
     public void actionPerformed(ActionEvent e){
@@ -89,10 +90,10 @@ public class EventHandler implements ActionListener {
         }else if (e.getSource()==Minesweeper.getOceanButton()){
             if (Minesweeper.getCurrentTheme()!=Theme.OCEAN){
                 Minesweeper.setCurrentTheme(Theme.OCEAN);
-                Minesweeper.getWelcomePanel().setBackground(new Color(0, 168, 243));
-                Minesweeper.getGamePanel().setBackground(new Color(0, 168, 243));
-                Minesweeper.getThemesPanel().setBackground(new Color(0, 168, 243));
-                Minesweeper.getDifficultyPanel().setBackground(new Color(0, 168, 243));
+                Minesweeper.getWelcomePanel().setBackground(oceanBackground);
+                Minesweeper.getGamePanel().setBackground(oceanBackground);
+                Minesweeper.getThemesPanel().setBackground(oceanBackground);
+                Minesweeper.getDifficultyPanel().setBackground(oceanBackground);
                 Minesweeper.getBombIcon().setImage(Minesweeper.getBombImageOcean());
                 Minesweeper.getBombExplosionIcon().setImage(Minesweeper.getBombExplosionImageOcean());
                 Minesweeper.getZeroIcon().setImage(Minesweeper.getZeroImageOcean());
@@ -129,21 +130,21 @@ public class EventHandler implements ActionListener {
         }else if (e.getSource()==Minesweeper.getEasyButton()){
             if (Minesweeper.getCurrentDifficulty()!=Difficulty.EASY){
                 Minesweeper.setCurrentDifficulty(Difficulty.EASY);
-                //reconfigure panel size for game, num of label/buttons, placement
+                //reconfigure frame size for game, num of label/buttons, placement
             }
 
         //if the user presses the medium button
         }else if (e.getSource()==Minesweeper.getMediumButton()){
             if (Minesweeper.getCurrentDifficulty()!=Difficulty.MEDIUM){
                 Minesweeper.setCurrentDifficulty(Difficulty.MEDIUM);
-                //reconfigure panel size for game, num of label/buttons, placement
+                //reconfigure frame size for game, num of label/buttons, placement
             }
 
         //if the user presses the hard button
         }else if (e.getSource()==Minesweeper.getHardButton()){
             if (Minesweeper.getCurrentDifficulty()!=Difficulty.HARD){
                 Minesweeper.setCurrentDifficulty(Difficulty.HARD);
-                //reconfigure panel size for game, num of label/buttons, placement
+                //reconfigure frame size for game, num of label/buttons, placement
             }
 
         //if the user presses the back button on the difficulty panel
