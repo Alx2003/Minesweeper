@@ -6,24 +6,42 @@ import java.awt.event.ActionListener;
 public class EventHandler implements ActionListener {
 
     private static GameGrid currentGrid;
+    private static Difficulty currentDifficulty;
+    private static int[] gamePixels = Minesweeper.getEasyGamePixels();
     private static final Color oceanBackground = new Color(0, 168, 243);
 
     @Override
     public void actionPerformed(ActionEvent e){
         //if user presses play button on main menu
         if (e.getSource()==Minesweeper.getWelcomeScreenPlayButton()){
+            currentDifficulty = Minesweeper.getCurrentDifficulty();
             //generate the grid pattern for the bombs and numbers
-            currentGrid = new GameGrid();
+            currentGrid = new GameGrid(currentDifficulty);
             currentGrid.output();
 
-            //add objects to game panel
-            Minesweeper.getFrame().setSize(275, 360);
+            Minesweeper.getFrame().setSize(gamePixels[0], gamePixels[1]);
             Minesweeper.getFrame().remove(Minesweeper.getWelcomePanel());
             Minesweeper.getFrame().add(Minesweeper.getGamePanel());
 
             int row = 0;
             int column = 0;
-            for (int i = 0; i < 80; i++){
+            int numOfSpots = 0;
+            int maxColumnIndex = 0;
+            switch (Minesweeper.getCurrentDifficulty()){
+                case EASY -> {
+                    numOfSpots = 80;
+                    maxColumnIndex = 7;
+                }
+                case MEDIUM -> {
+                    numOfSpots = 99;
+                    maxColumnIndex = 8;
+                }
+                case HARD -> {
+                    numOfSpots = 120;
+                    maxColumnIndex = 9;
+                }
+            }
+            for (int i = 0; i < numOfSpots; i++){
                 Minesweeper.getButtons()[i].setIcon(null);
                 Minesweeper.getGamePanel().add(Minesweeper.getButtons()[i]);
                 if (currentGrid.getBombGrid()[row][column]){
@@ -42,7 +60,7 @@ public class EventHandler implements ActionListener {
                         case 8 -> Minesweeper.getLocations()[i].setIcon(Minesweeper.getEightIcon());
                     }
                 }
-                if (column == 7){
+                if (column == maxColumnIndex){
                     column = 0;
                     row += 1;
                 }else {
@@ -50,7 +68,8 @@ public class EventHandler implements ActionListener {
                 }
                 Minesweeper.getGamePanel().add(Minesweeper.getLocations()[i]);
             }
-
+            Minesweeper.getGamePanel().revalidate();
+            Minesweeper.getGamePanel().repaint();
             Minesweeper.getFrame().revalidate();
             Minesweeper.getFrame().repaint();
 
@@ -66,6 +85,7 @@ public class EventHandler implements ActionListener {
         }else if (e.getSource()==Minesweeper.getClassicButton()){
             if (Minesweeper.getCurrentTheme()!=Theme.CLASSIC){
                 Minesweeper.setCurrentTheme(Theme.CLASSIC);
+                Minesweeper.getCurrentThemeIndicator().setBounds(60, 50, 20, 20);
                 Minesweeper.getWelcomePanel().setBackground(Color.lightGray);
                 Minesweeper.getGamePanel().setBackground(Color.lightGray);
                 Minesweeper.getThemesPanel().setBackground(Color.lightGray);
@@ -90,6 +110,7 @@ public class EventHandler implements ActionListener {
         }else if (e.getSource()==Minesweeper.getOceanButton()){
             if (Minesweeper.getCurrentTheme()!=Theme.OCEAN){
                 Minesweeper.setCurrentTheme(Theme.OCEAN);
+                Minesweeper.getCurrentThemeIndicator().setBounds(60, 75, 20, 20);
                 Minesweeper.getWelcomePanel().setBackground(oceanBackground);
                 Minesweeper.getGamePanel().setBackground(oceanBackground);
                 Minesweeper.getThemesPanel().setBackground(oceanBackground);
@@ -130,21 +151,39 @@ public class EventHandler implements ActionListener {
         }else if (e.getSource()==Minesweeper.getEasyButton()){
             if (Minesweeper.getCurrentDifficulty()!=Difficulty.EASY){
                 Minesweeper.setCurrentDifficulty(Difficulty.EASY);
-                //reconfigure frame size for game, num of label/buttons, placement
+                gamePixels = Minesweeper.getEasyGamePixels();
+                Minesweeper.getCurrentDifficultyIndicator().setBounds(60, 50, 20, 20);
+                Minesweeper.getDifficultyPanel().revalidate();
+                Minesweeper.getDifficultyPanel().repaint();
+                Minesweeper.makeGameObjects(Difficulty.EASY);
+                Minesweeper.getGameOverMessage().setBounds(95, 15, 150, 20);
+                Minesweeper.getReturnButton().setBounds(80, 50, 100, 20);
             }
 
         //if the user presses the medium button
         }else if (e.getSource()==Minesweeper.getMediumButton()){
             if (Minesweeper.getCurrentDifficulty()!=Difficulty.MEDIUM){
                 Minesweeper.setCurrentDifficulty(Difficulty.MEDIUM);
-                //reconfigure frame size for game, num of label/buttons, placement
+                gamePixels = Minesweeper.getMediumGamePixels();
+                Minesweeper.getCurrentDifficultyIndicator().setBounds(60, 75, 20, 20);
+                Minesweeper.getDifficultyPanel().revalidate();
+                Minesweeper.getDifficultyPanel().repaint();
+                Minesweeper.makeGameObjects(Difficulty.MEDIUM);
+                Minesweeper.getGameOverMessage().setBounds(105, 15, 150, 20);
+                Minesweeper.getReturnButton().setBounds(90, 50, 100, 20);
             }
 
         //if the user presses the hard button
         }else if (e.getSource()==Minesweeper.getHardButton()){
             if (Minesweeper.getCurrentDifficulty()!=Difficulty.HARD){
                 Minesweeper.setCurrentDifficulty(Difficulty.HARD);
-                //reconfigure frame size for game, num of label/buttons, placement
+                gamePixels = Minesweeper.getHardGamePixels();
+                Minesweeper.getCurrentDifficultyIndicator().setBounds(60, 100, 20, 20);
+                Minesweeper.getDifficultyPanel().revalidate();
+                Minesweeper.getDifficultyPanel().repaint();
+                Minesweeper.makeGameObjects(Difficulty.HARD);
+                Minesweeper.getGameOverMessage().setBounds(120, 15, 150, 20);
+                Minesweeper.getReturnButton().setBounds(105, 50, 100, 20);
             }
 
         //if the user presses the back button on the difficulty panel
@@ -163,8 +202,24 @@ public class EventHandler implements ActionListener {
         }else {
             int row = 0;
             int column = 0;
+            int numOfSpots = 0;
+            int maxColumnIndex = 0;
+            switch (Minesweeper.getCurrentDifficulty()){
+                case EASY -> {
+                    numOfSpots = 80;
+                    maxColumnIndex = 7;
+                }
+                case MEDIUM -> {
+                    numOfSpots = 99;
+                    maxColumnIndex = 8;
+                }
+                case HARD -> {
+                    numOfSpots = 120;
+                    maxColumnIndex = 9;
+                }
+            }
             //loop to check which of the buttons on the grid was clicked
-            for (int i=0; i<80; i++){
+            for (int i=0; i<numOfSpots; i++){
                 if (e.getSource()==Minesweeper.getButtons()[i]){
                     Minesweeper.getGamePanel().remove(Minesweeper.getButtons()[i]);
                     Minesweeper.getGamePanel().revalidate();
@@ -202,7 +257,7 @@ public class EventHandler implements ActionListener {
                         break;
                     }
                 }
-                if (column==7){
+                if (column==maxColumnIndex){
                     column = 0;
                     row += 1;
                 }else {
@@ -218,7 +273,13 @@ public class EventHandler implements ActionListener {
     private void gameOverMessage(){
         Minesweeper.getGamePanel().add(Minesweeper.getGameOverMessage());
         Minesweeper.getGamePanel().add(Minesweeper.getReturnButton());
-        for (int i=0; i<80; i++){
+        int numOfSpots = 0;
+        switch (Minesweeper.getCurrentDifficulty()){
+            case EASY -> numOfSpots = 80;
+            case MEDIUM -> numOfSpots = 99;
+            case HARD -> numOfSpots = 120;
+        }
+        for (int i=0; i<numOfSpots; i++){
             Minesweeper.getGamePanel().remove(Minesweeper.getButtons()[i]);
         }
 
@@ -241,9 +302,7 @@ public class EventHandler implements ActionListener {
         Minesweeper.getFrame().add(Minesweeper.getWelcomePanel());
         Minesweeper.getFrame().revalidate();
         Minesweeper.getFrame().repaint();
-        Minesweeper.getGamePanel().remove(Minesweeper.getGameOverMessage());
-        Minesweeper.getGamePanel().remove(Minesweeper.getWinnerMessage());
-        Minesweeper.getGamePanel().remove(Minesweeper.getReturnButton());
+        Minesweeper.getGamePanel().removeAll();
     }
 
     /**
@@ -269,55 +328,117 @@ public class EventHandler implements ActionListener {
      * @param tileLocation int - index position representing the tile location
      */
     private void recursiveClearEmptySpots(int tileLocation){
+        int divider = 0;
+        switch (currentDifficulty){
+            case EASY -> divider = 8;
+            case MEDIUM -> divider = 9;
+            case HARD -> divider = 10;
+        }
         int column = 0;
-        int row = tileLocation/8;
-        for (int i=0; i<8; i++){
-            if ((tileLocation-i)%8==0){
+        int row = tileLocation/divider;
+        for (int i=0; i<divider; i++){
+            if ((tileLocation-i)%divider==0){
                 column = i;
             }
         }
         //determine which surrounding spaces are eligible spaces to check
         switch (currentGrid.getCaseGrid()[row][column]){
             case TOP_LEFT -> {
-                int[] surroundingTiles = new int[] {1, 8, 9};
+                int[] surroundingTiles = {0, 0, 0};
+                switch (currentDifficulty){
+                    case EASY -> surroundingTiles = new int[] {1, 8, 9};
+                    case MEDIUM -> surroundingTiles = new int[] {1, 9, 10};
+                    case HARD -> surroundingTiles = new int[] {1, 10, 11};
+                }
                 removeButtonAndCheck(surroundingTiles);
             }
             case TOP_RIGHT -> {
-                int[] surroundingTiles = new int[] {6, 14, 15};
+                int[] surroundingTiles = {0, 0, 0};
+                switch (currentDifficulty){
+                    case EASY -> surroundingTiles = new int[] {6, 14, 15};
+                    case MEDIUM -> surroundingTiles = new int[] {7, 16, 17};
+                    case HARD -> surroundingTiles = new int[] {8, 18, 19};
+                }
                 removeButtonAndCheck(surroundingTiles);
             }
             case BOTTOM_RIGHT -> {
-                int[] surroundingTiles = new int[] {70, 71, 78};
+                int[] surroundingTiles = {0, 0, 0};
+                switch (currentDifficulty){
+                    case EASY -> surroundingTiles = new int[] {70, 71, 78};
+                    case MEDIUM -> surroundingTiles = new int[] {88, 89, 97};
+                    case HARD -> surroundingTiles = new int[] {108, 109, 118};
+                }
                 removeButtonAndCheck(surroundingTiles);
             }
             case BOTTOM_LEFT -> {
-                int[] surroundingTiles = new int[] {64, 65, 73};
+                int[] surroundingTiles = {0, 0, 0};
+                switch (currentDifficulty){
+                    case EASY -> surroundingTiles = new int[] {64, 65, 73};
+                    case MEDIUM -> surroundingTiles = new int[] {81, 82, 91};
+                    case HARD -> surroundingTiles = new int[] {100, 101, 111};
+                }
                 removeButtonAndCheck(surroundingTiles);
             }
             case TOP -> {
-                int[] surroundingTiles = new int[] {tileLocation-1, tileLocation+1, tileLocation+7, tileLocation+8,
-                        tileLocation+9};
+                int[] surroundingTiles = {0, 0, 0, 0, 0};
+                switch (currentDifficulty){
+                    case EASY -> surroundingTiles = new int[] {tileLocation-1, tileLocation+1, tileLocation+7,
+                            tileLocation+8, tileLocation+9};
+                    case MEDIUM -> surroundingTiles = new int[] {tileLocation-1, tileLocation+1, tileLocation+8,
+                            tileLocation+9, tileLocation+10};
+                    case HARD -> surroundingTiles = new int[] {tileLocation-1, tileLocation+1, tileLocation+9,
+                            tileLocation+10, tileLocation+11};
+                }
                 removeButtonAndCheck(surroundingTiles);
             }
             case RIGHT -> {
-                int[] surroundingTiles = new int[] {tileLocation-9, tileLocation-8, tileLocation-1, tileLocation+7,
-                        tileLocation+8};
+                int[] surroundingTiles = {0, 0, 0, 0, 0};
+                switch (currentDifficulty){
+                    case EASY -> surroundingTiles = new int[] {tileLocation-9, tileLocation-8, tileLocation-1,
+                            tileLocation+7, tileLocation+8};
+                    case MEDIUM -> surroundingTiles = new int[] {tileLocation-10, tileLocation-9, tileLocation-1,
+                            tileLocation+8, tileLocation+9};
+                    case HARD -> surroundingTiles = new int[] {tileLocation-11, tileLocation-10, tileLocation-1,
+                            tileLocation+9, tileLocation+10};
+                }
                 removeButtonAndCheck(surroundingTiles);
             }
             case BOTTOM -> {
-                int[] surroundingTiles = new int[] {tileLocation-9, tileLocation-8, tileLocation-7, tileLocation-1,
-                        tileLocation+1};
+                int[] surroundingTiles = {0, 0, 0, 0, 0};
+                switch (currentDifficulty){
+                    case EASY -> surroundingTiles = new int[] {tileLocation-9, tileLocation-8, tileLocation-7,
+                            tileLocation-1, tileLocation+1};
+                    case MEDIUM -> surroundingTiles = new int[] {tileLocation-10, tileLocation-9, tileLocation-8,
+                            tileLocation-1, tileLocation+1};
+                    case HARD -> surroundingTiles = new int[] {tileLocation-11, tileLocation-10, tileLocation-9,
+                            tileLocation-1, tileLocation+1};
+                }
                 removeButtonAndCheck(surroundingTiles);
             }
             case LEFT -> {
-                int[] surroundingTiles = new int[] {tileLocation-8, tileLocation-7, tileLocation+1, tileLocation+8,
-                        tileLocation+9};
+                int[] surroundingTiles = {0, 0, 0, 0, 0};
+                switch (currentDifficulty){
+                    case EASY -> surroundingTiles = new int[] {tileLocation-8, tileLocation-7, tileLocation+1,
+                            tileLocation+8, tileLocation+9};
+                    case MEDIUM -> surroundingTiles = new int[] {tileLocation-9, tileLocation-8, tileLocation+1,
+                            tileLocation+9, tileLocation+10};
+                    case HARD -> surroundingTiles = new int[] {tileLocation-10, tileLocation-9, tileLocation+1,
+                            tileLocation+11, tileLocation+12};
+                }
                 removeButtonAndCheck(surroundingTiles);
             }
             case NORMAL -> {
-                int[] surroundingTiles = new int[] {tileLocation-9, tileLocation-8, tileLocation-7, tileLocation-1,
-                        tileLocation+1, tileLocation+7, tileLocation+8, tileLocation+9};
+                int[] surroundingTiles = {0, 0, 0, 0, 0};
+                switch (currentDifficulty){
+                    case EASY -> surroundingTiles = new int[] {tileLocation-9, tileLocation-8, tileLocation-7,
+                            tileLocation-1, tileLocation+1, tileLocation+7, tileLocation+8, tileLocation+9};
+                    case MEDIUM -> surroundingTiles = new int[] {tileLocation-10, tileLocation-9, tileLocation-8,
+                            tileLocation-1, tileLocation+1, tileLocation+8, tileLocation+9, tileLocation+10};
+                    case HARD -> surroundingTiles = new int[] {tileLocation-11, tileLocation-10, tileLocation-9,
+                            tileLocation-1, tileLocation+1, tileLocation+9, tileLocation+10, tileLocation+11};
+                }
                 removeButtonAndCheck(surroundingTiles);
+
             }
         }
     }

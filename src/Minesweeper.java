@@ -12,6 +12,10 @@ public class Minesweeper {
     private static Theme currentTheme;
     private static Difficulty currentDifficulty;
 
+    private static final int[] easyGamePixels = new int[] {275, 360};
+    private static final int[] mediumGamePixels = new int[] {300, 385};
+    private static final int[] hardGamePixels = new int[] {325, 410};
+
     //Class level GUI objects
     private static JFrame frame;
     private static JPanel welcomePanel;
@@ -24,11 +28,13 @@ public class Minesweeper {
     private static JLabel[] locations;
 
     private static JPanel themesPanel;
+    private static JLabel currentThemeIndicator;
     private static JButton classicButton;
     private static JButton oceanButton;
     private static JButton themesBackButton;
 
     private static JPanel difficultyPanel;
+    private static JLabel currentDifficultyIndicator;
     private static JButton easyButton;
     private static JButton mediumButton;
     private static JButton hardButton;
@@ -78,10 +84,10 @@ public class Minesweeper {
     private static JButton returnButton;
 
     public static void main(String[] args) throws IOException {
-        
+
         currentTheme = Theme.CLASSIC;
         currentDifficulty = Difficulty.EASY;
-        
+
         //welcomePanel objects
         welcomePanel = new JPanel();
         welcomePanel.setLayout(null);
@@ -119,6 +125,9 @@ public class Minesweeper {
         JLabel themesText = new JLabel("Themes:");
         themesText.setFont(new Font("Arial", Font.BOLD, 14));
         themesText.setBounds(85, 20, 80, 20);
+        currentThemeIndicator = new JLabel("►");
+        currentThemeIndicator.setFont(new Font("Arial", Font.BOLD, 12));
+        currentThemeIndicator.setBounds(60, 50, 20, 20);
         classicButton = new JButton("Classic");
         classicButton.setBounds(75, 50, 80, 20);
         classicButton.addActionListener(new EventHandler());
@@ -129,6 +138,7 @@ public class Minesweeper {
         themesBackButton.setBounds(75, 110, 80, 20);
         themesBackButton.addActionListener(new EventHandler());
         themesPanel.add(themesText);
+        themesPanel.add(currentThemeIndicator);
         themesPanel.add(classicButton);
         themesPanel.add(oceanButton);
         themesPanel.add(themesBackButton);
@@ -140,6 +150,9 @@ public class Minesweeper {
         JLabel difficultiesText = new JLabel("Difficulties:");
         difficultiesText.setFont(new Font("Arial", Font.BOLD, 14));
         difficultiesText.setBounds(75, 20, 80, 20);
+        currentDifficultyIndicator = new JLabel("►");
+        currentDifficultyIndicator.setFont(new Font("Arial", Font.BOLD, 12));
+        currentDifficultyIndicator.setBounds(60, 50, 20, 20);
         easyButton = new JButton("Easy");
         easyButton.setBounds(75, 50, 80, 20);
         easyButton.addActionListener(new EventHandler());
@@ -153,6 +166,7 @@ public class Minesweeper {
         difficultyBackButton.setBounds(75, 135, 80, 20);
         difficultyBackButton.addActionListener(new EventHandler());
         difficultyPanel.add(difficultiesText);
+        difficultyPanel.add(currentDifficultyIndicator);
         difficultyPanel.add(easyButton);
         difficultyPanel.add(mediumButton);
         difficultyPanel.add(hardButton);
@@ -163,42 +177,8 @@ public class Minesweeper {
         gamePanel.setLayout(null);
         gamePanel.setBackground(Color.lightGray);
 
-        //buttons representing each grid space & labels representing bomb/number locations
-        buttons = new JButton[80];
-        locations = new JLabel[80];
-        int row = 0;
-        int column = 0;
-        for (int i=0; i<80; i++){
-            buttons[i] = new JButton();
-            buttons[i].setBounds(35+(column*24), 80+(row*24), 21, 21);
-            buttons[i].addActionListener(new EventHandler());
-            int currentLocation = i;
-            //logic for placing and removing flags
-            buttons[i].addMouseListener(new MouseListener() {
-                @Override
-                public void mouseClicked(MouseEvent e) {
-                    if (SwingUtilities.isRightMouseButton(e)){
-                        if (buttons[currentLocation].getIcon()==flagIcon){
-                            buttons[currentLocation].setIcon(null);
-                        }else {
-                            buttons[currentLocation].setIcon(flagIcon);
-                        }
-                    }
-                }
-                public void mousePressed(MouseEvent e) { }
-                public void mouseReleased(MouseEvent e) { }
-                public void mouseEntered(MouseEvent e) { }
-                public void mouseExited(MouseEvent e) { }
-            });
-            locations[i] = new JLabel();
-            locations[i].setBounds(35+(column*24), 80+(row*24), 21, 21);
-            if (column==7){
-                column = 0;
-                row += 1;
-            }else {
-                column += 1;
-            }
-        }
+        //initial setup for game on launch
+        makeGameObjects(currentDifficulty);
 
         //images representing each spot
         bombImageClassic = ImageIO.read(new File("src/resources/classic/bomb.png"));
@@ -226,7 +206,7 @@ public class Minesweeper {
         sevenImageOcean = ImageIO.read(new File("src/resources/ocean/seven.png"));
         eightImageOcean = ImageIO.read(new File("src/resources/ocean/eight.png"));
         flagImageOcean = ImageIO.read(new File("src/resources/ocean/flag.png"));
-        
+
         bombIcon = new ImageIcon(bombImageClassic);
         bombExplosionIcon = new ImageIcon(bombExplosionImageClassic);
         zeroIcon = new ImageIcon(zeroImageClassic);
@@ -249,6 +229,62 @@ public class Minesweeper {
         returnButton.setBounds(80, 50, 100, 20);
         returnButton.addActionListener(new EventHandler());
     }
+
+    //Buttons representing each grid space & labels representing bomb/number locations
+    public static void makeGameObjects(Difficulty currentDifficulty){
+        int numOfSpots = 0;
+        int maxColumnIndex = 0;
+        switch (currentDifficulty){
+            case EASY -> {
+                numOfSpots = 80;
+                maxColumnIndex = 7;
+            }
+            case MEDIUM -> {
+                numOfSpots = 99;
+                maxColumnIndex = 8;
+            }
+            case HARD -> {
+                numOfSpots = 120;
+                maxColumnIndex = 9;
+            }
+        }
+        buttons = new JButton[numOfSpots];
+        locations = new JLabel[numOfSpots];
+        int row = 0;
+        int column = 0;
+        for (int i=0; i<numOfSpots; i++){
+            buttons[i] = new JButton();
+            buttons[i].setBounds(35+(column*24), 80+(row*24), 21, 21);
+            buttons[i].addActionListener(new EventHandler());
+            int currentLocation = i;
+            //logic for placing and removing flags
+            buttons[i].addMouseListener(new MouseListener() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    if (SwingUtilities.isRightMouseButton(e)){
+                        if (buttons[currentLocation].getIcon()==flagIcon){
+                            buttons[currentLocation].setIcon(null);
+                        }else {
+                            buttons[currentLocation].setIcon(flagIcon);
+                        }
+                    }
+                }
+                public void mousePressed(MouseEvent e) { }
+                public void mouseReleased(MouseEvent e) { }
+                public void mouseEntered(MouseEvent e) { }
+                public void mouseExited(MouseEvent e) { }
+            });
+            locations[i] = new JLabel();
+            locations[i].setBounds(35+(column*24), 80+(row*24), 21, 21);
+            if (column==maxColumnIndex){
+                column = 0;
+                row += 1;
+            }else {
+                column += 1;
+            }
+        }
+    }
+
     //Accessor and mutator for currentTheme and currentDifficulty
     public static Theme getCurrentTheme(){
         return currentTheme;
@@ -261,6 +297,16 @@ public class Minesweeper {
     }
     public static void setCurrentDifficulty(Difficulty newDifficulty){
         currentDifficulty = newDifficulty;
+    }
+
+    public static int[] getEasyGamePixels(){
+        return easyGamePixels;
+    }
+    public static int[] getMediumGamePixels() {
+        return mediumGamePixels;
+    }
+    public static int[] getHardGamePixels() {
+        return hardGamePixels;
     }
 
     //Accessors for GUI objects
@@ -283,6 +329,9 @@ public class Minesweeper {
     public static JPanel getThemesPanel(){
         return themesPanel;
     }
+    public static JLabel getCurrentThemeIndicator() {
+        return currentThemeIndicator;
+    }
     public static JButton getClassicButton(){
         return classicButton;
     }
@@ -295,6 +344,9 @@ public class Minesweeper {
 
     public static JPanel getDifficultyPanel() {
         return difficultyPanel;
+    }
+    public static JLabel getCurrentDifficultyIndicator(){
+        return currentDifficultyIndicator;
     }
     public static JButton getEasyButton() {
         return easyButton;

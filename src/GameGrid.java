@@ -1,25 +1,67 @@
 import java.util.*;
 
 public class GameGrid {
-    private final boolean[][] bombGrid = new boolean[10][8];
-    private final int[][] numberGrid = new int[10][8];
-    private final SpecialCase[][] caseGrid = new SpecialCase[10][8];
+    private boolean[][] bombGrid;
+    private int[][] numberGrid;
+    private SpecialCase[][] caseGrid;
 
     /**
      * Constructs a GameGrid object
      */
-    public GameGrid(){
-        generateAndRandomizeBombs();
+    public GameGrid(Difficulty currentDifficulty){
+        switch (currentDifficulty){
+            case EASY -> {
+                bombGrid = new boolean[10][8];
+                numberGrid = new int[10][8];
+                caseGrid = new SpecialCase[10][8];
+            }
+            case MEDIUM -> {
+                bombGrid = new boolean[11][9];
+                numberGrid = new int[11][9];
+                caseGrid = new SpecialCase[11][9];
+            }
+            case HARD -> {
+                bombGrid = new boolean[12][10];
+                numberGrid = new int[12][10];
+                caseGrid = new SpecialCase[12][10];
+            }
+        }
+        generateAndRandomizeBombs(currentDifficulty);
         determineClues();
     }
 
     /**
      * Generate the random placement of bombs on the grid
      */
-    private void generateAndRandomizeBombs(){
-        //populate the bombGrid with 10 bomb locations
-        for (int row=0; row<bombGrid.length; row++){
-            bombGrid[row] = new boolean[] {true, false, false, false, false, false, false, false};
+    private void generateAndRandomizeBombs(Difficulty currentDifficulty){
+        //populate the bombGrid with adequate bomb locations
+        switch (currentDifficulty){
+            //EASY has 10 bombs
+            case EASY -> {
+                for (int row=0; row<bombGrid.length; row++){
+                    bombGrid[row] = new boolean[] {true, false, false, false, false, false, false, false};
+                }
+            }
+            //MEDIUM has 15 bombs
+            case MEDIUM -> {
+                for (int row=0; row<bombGrid.length; row++){
+                    if (row<=3){
+                        bombGrid[row] = new boolean[] {true, true, false, false, false, false, false, false, false};
+                    }else {
+                        bombGrid[row] = new boolean[]{true, false, false, false, false, false, false, false, false};
+                    }
+                }
+            }
+            //HARD has 20 bombs
+            case HARD -> {
+                for (int row=0; row<bombGrid.length; row++){
+                    if (row<=7) {
+                        bombGrid[row] = new boolean[]{true, true, false, false, false, false, false, false, false, false};
+                    }else {
+                        bombGrid[row] = new boolean[]{true, false, false, false, false, false, false, false, false, false};
+                    }
+                }
+            }
         }
         //randomize the location of the bombs
         for (int i=0; i<bombGrid.length; i++){
