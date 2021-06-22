@@ -423,7 +423,7 @@ public class EventHandler implements ActionListener {
                     case MEDIUM -> surroundingTiles = new int[] {tileLocation-9, tileLocation-8, tileLocation+1,
                             tileLocation+9, tileLocation+10};
                     case HARD -> surroundingTiles = new int[] {tileLocation-10, tileLocation-9, tileLocation+1,
-                            tileLocation+11, tileLocation+12};
+                            tileLocation+10, tileLocation+11};
                 }
                 removeButtonAndCheck(surroundingTiles);
             }
