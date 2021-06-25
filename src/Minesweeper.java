@@ -1,3 +1,13 @@
+/*
+ * Program: Minesweeper
+ * Description: This program runs a minesweeper game using the Swing library. There are two visual themes to the program
+ *              and there are three difficulties that increase the size of the grid and the number of bombs. The program
+ *              uses recursion clear all surrounding tiles when the player makes a guess on a spot with no surrounding
+ *              bombs.
+ * Developer: Alexander Lay
+ * Date: June 24, 2021
+ */
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -24,6 +34,7 @@ public class Minesweeper {
     private static JButton difficultyButton;
 
     private static JPanel gamePanel;
+    private static JLabel gameTopText;
     private static JButton[] buttons;
     private static JLabel[] locations;
 
@@ -176,6 +187,9 @@ public class Minesweeper {
         gamePanel = new JPanel();
         gamePanel.setLayout(null);
         gamePanel.setBackground(Color.lightGray);
+        gameTopText = new JLabel("<html>Difficulty: Easy<br># of Bombs: 10</html>");
+        gameTopText.setBounds(90, 20, 100, 40);
+        gamePanel.add(gameTopText);
 
         //initial setup for game on launch
         makeGameObjects(currentDifficulty);
@@ -363,6 +377,9 @@ public class Minesweeper {
 
     public static JPanel getGamePanel(){
         return gamePanel;
+    }
+    public static JLabel getGameTopText() {
+        return gameTopText;
     }
     public static JButton[] getButtons(){
         return buttons;

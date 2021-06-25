@@ -21,6 +21,7 @@ public class EventHandler implements ActionListener {
 
             Minesweeper.getFrame().setSize(gamePixels[0], gamePixels[1]);
             Minesweeper.getFrame().remove(Minesweeper.getWelcomePanel());
+            Minesweeper.getGamePanel().add(Minesweeper.getGameTopText());
             Minesweeper.getFrame().add(Minesweeper.getGamePanel());
 
             int row = 0;
@@ -155,6 +156,8 @@ public class EventHandler implements ActionListener {
                 Minesweeper.getCurrentDifficultyIndicator().setBounds(60, 50, 20, 20);
                 Minesweeper.getDifficultyPanel().revalidate();
                 Minesweeper.getDifficultyPanel().repaint();
+                Minesweeper.getGameTopText().setText("<html>Difficulty: Easy<br># of Bombs: 10</html>");
+                Minesweeper.getGameTopText().setBounds(90, 20, 100, 40);
                 Minesweeper.makeGameObjects(Difficulty.EASY);
                 Minesweeper.getGameOverMessage().setBounds(95, 15, 150, 20);
                 Minesweeper.getReturnButton().setBounds(80, 50, 100, 20);
@@ -168,6 +171,8 @@ public class EventHandler implements ActionListener {
                 Minesweeper.getCurrentDifficultyIndicator().setBounds(60, 75, 20, 20);
                 Minesweeper.getDifficultyPanel().revalidate();
                 Minesweeper.getDifficultyPanel().repaint();
+                Minesweeper.getGameTopText().setText("<html>Difficulty: Medium<br># of Bombs: 15</html>");
+                Minesweeper.getGameTopText().setBounds(100, 20, 100, 40);
                 Minesweeper.makeGameObjects(Difficulty.MEDIUM);
                 Minesweeper.getGameOverMessage().setBounds(105, 15, 150, 20);
                 Minesweeper.getReturnButton().setBounds(90, 50, 100, 20);
@@ -181,6 +186,8 @@ public class EventHandler implements ActionListener {
                 Minesweeper.getCurrentDifficultyIndicator().setBounds(60, 100, 20, 20);
                 Minesweeper.getDifficultyPanel().revalidate();
                 Minesweeper.getDifficultyPanel().repaint();
+                Minesweeper.getGameTopText().setText("<html>Difficulty: Hard<br># of Bombs: 20</html>");
+                Minesweeper.getGameTopText().setBounds(115, 20, 100, 40);
                 Minesweeper.makeGameObjects(Difficulty.HARD);
                 Minesweeper.getGameOverMessage().setBounds(120, 15, 150, 20);
                 Minesweeper.getReturnButton().setBounds(105, 50, 100, 20);
@@ -271,6 +278,7 @@ public class EventHandler implements ActionListener {
      * Modifies game panel if the user reveal a bomb
      */
     private void gameOverMessage(){
+        Minesweeper.getGamePanel().remove(Minesweeper.getGameTopText());
         Minesweeper.getGamePanel().add(Minesweeper.getGameOverMessage());
         Minesweeper.getGamePanel().add(Minesweeper.getReturnButton());
         int numOfSpots = 0;
