@@ -17,7 +17,6 @@ public class EventHandler implements ActionListener {
             currentDifficulty = Minesweeper.getCurrentDifficulty();
             //generate the grid pattern for the bombs and numbers
             currentGrid = new GameGrid(currentDifficulty);
-            currentGrid.output();
 
             Minesweeper.getFrame().setSize(gamePixels[0], gamePixels[1]);
             Minesweeper.getFrame().remove(Minesweeper.getWelcomePanel());
@@ -194,12 +193,16 @@ public class EventHandler implements ActionListener {
             }
 
         //if the user presses the back button on the difficulty panel
-        }else if (e.getSource()==Minesweeper.getDifficultyBackButton()){
+        }else if (e.getSource()==Minesweeper.getDifficultyBackButton()) {
             Minesweeper.getFrame().setSize(300, 250);
             Minesweeper.getFrame().remove(Minesweeper.getDifficultyPanel());
             Minesweeper.getFrame().add(Minesweeper.getWelcomePanel());
             Minesweeper.getFrame().revalidate();
             Minesweeper.getFrame().repaint();
+
+        //if the user presses the exit button on the main menu
+        }else if (e.getSource()==Minesweeper.getExitButton()){
+            Minesweeper.getFrame().dispose();
 
         //if the user presses the main menu button
         }else if (e.getSource()==Minesweeper.getReturnButton()){

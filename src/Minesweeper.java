@@ -32,6 +32,7 @@ public class Minesweeper {
     private static JButton welcomeScreenPlayButton;
     private static JButton themesButton;
     private static JButton difficultyButton;
+    private static JButton exitButton;
 
     private static JPanel gamePanel;
     private static JLabel gameTopText;
@@ -107,14 +108,17 @@ public class Minesweeper {
         welcomeScreenText.setFont(new Font("Serif", Font.BOLD, 20));
         welcomeScreenText.setBounds(30, 25, 225, 40);
         welcomeScreenPlayButton = new JButton("PLAY");
-        welcomeScreenPlayButton.setBounds(110, 100, 65, 20);
+        welcomeScreenPlayButton.setBounds(95, 100, 100, 20);
         welcomeScreenPlayButton.addActionListener(new EventHandler());
         themesButton = new JButton("Themes");
-        themesButton.setBounds(100, 125, 80, 20);
+        themesButton.setBounds(95, 125, 100, 20);
         themesButton.addActionListener(new EventHandler());
         difficultyButton = new JButton("Difficulty");
-        difficultyButton.setBounds(90, 150, 100, 20);
+        difficultyButton.setBounds(95, 150, 100, 20);
         difficultyButton.addActionListener(new EventHandler());
+        exitButton = new JButton("Close");
+        exitButton.setBounds(95, 175, 100, 20);
+        exitButton.addActionListener(new EventHandler());
 
         //welcomePanel configurations
         frame = new JFrame();
@@ -128,6 +132,7 @@ public class Minesweeper {
         welcomePanel.add(welcomeScreenPlayButton);
         welcomePanel.add(themesButton);
         welcomePanel.add(difficultyButton);
+        welcomePanel.add(exitButton);
 
         //themesPanel objects
         themesPanel = new JPanel();
@@ -338,6 +343,9 @@ public class Minesweeper {
     }
     public static JButton getDifficultyButton() {
         return difficultyButton;
+    }
+    public static JButton getExitButton() {
+        return exitButton;
     }
 
     public static JPanel getThemesPanel(){

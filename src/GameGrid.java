@@ -300,7 +300,7 @@ public class GameGrid {
     }
 
     /**
-     * Outputs the pattern of bombs and clues to the console
+     * Outputs the pattern of bombs and clues to the console - Bug Testing
      */
     public void output(){
         for (boolean[] booleans : bombGrid) {
