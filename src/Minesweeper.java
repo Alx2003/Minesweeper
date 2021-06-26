@@ -116,7 +116,7 @@ public class Minesweeper {
         difficultyButton = new JButton("Difficulty");
         difficultyButton.setBounds(95, 150, 100, 20);
         difficultyButton.addActionListener(new EventHandler());
-        exitButton = new JButton("Close");
+        exitButton = new JButton("Exit");
         exitButton.setBounds(95, 175, 100, 20);
         exitButton.addActionListener(new EventHandler());
 
